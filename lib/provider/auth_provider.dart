@@ -88,16 +88,18 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
-  static const String _key = 'SUPABASE_PERSIST_SESSION_KEY';
+  static const String _key = 'SESSION_KEY';
 
   Future<void> savePersistSession() async {
+    final key = dotenv.env[_key]!;
     if (_session != null) {
-      await _encryptedPrefs.setString(_key, _session!.persistSessionString);
+      await _encryptedPrefs.setString(key, _session!.persistSessionString);
     }
   }
 
   Future<String> getPersistSession() async {
-    return await _encryptedPrefs.getString(_key);
+    final key = dotenv.env[_key]!;
+    return await _encryptedPrefs.getString(key);
   }
 
   Future<bool> hasPersistSession() async {
@@ -106,6 +108,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> removePersistedSession() async {
-    await _encryptedPrefs.remove(_key);
+    final key = dotenv.env[_key]!;
+    await _encryptedPrefs.remove(key);
   }
 }

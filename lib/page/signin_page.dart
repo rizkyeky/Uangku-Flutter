@@ -14,9 +14,6 @@ class SignInPage extends StatelessWidget {
     context.read<BrightnessProvider>()
       .brightnessFromPlatform = MediaQuery.of(context).platformBrightness;
 
-    final foo = dotenv.env['ESCAPED_DOLLAR_SIGN'];
-    print(foo);
-
     String? email;
     String? password;
 

@@ -8,9 +8,6 @@ class HomePage extends StatelessWidget {
     Log().build('Home page');
     Localizations.localeOf(context);
     
-    final foo = dotenv.env['FOO'];
-    print(foo);
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('home'.i18n()),

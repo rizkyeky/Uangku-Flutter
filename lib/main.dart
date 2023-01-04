@@ -14,7 +14,10 @@ Future<void> main() async {
     final prefs = await prefsService.init();
     final encryptedPrefs = prefsService.encryptedPrefs(prefs);
 
-    final supabaseService = SupabaseService();
+    final supabaseService = SupabaseService(
+      url: dotenv.env['SUPABASE_URL']!,
+      apiKey: dotenv.env['SUPABASE_KEY']!
+    );
 
     final authService = AuthService(
       client: supabaseService.client
