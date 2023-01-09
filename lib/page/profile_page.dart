@@ -7,6 +7,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightnessProvider = context.read<BrightnessProvider>();
     final authProvider = context.read<AuthProvider>();
+    final profile = context.select<int, Profile?>((value) => null);
     Log().build('Profile page');
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(

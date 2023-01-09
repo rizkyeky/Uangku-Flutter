@@ -14,9 +14,12 @@ Future<void> main() async {
     final prefs = await prefsService.init();
     final encryptedPrefs = prefsService.encryptedPrefs(prefs);
 
+    final urlEncoded = dotenv.env['SUPABASE_URL_ENCODED']!;
+    final apiKeyEncoded = dotenv.env['SUPABASE_API_KEY_ENCODED']!;
+
     final supabaseService = SupabaseService(
-      url: dotenv.env['SUPABASE_URL']!,
-      apiKey: dotenv.env['SUPABASE_KEY']!
+      url: decryptSecretKey(SecretKey.supabaseUrlKey, urlEncoded),
+      apiKey: decryptSecretKey(SecretKey.supabaseApiKeyKey, apiKeyEncoded)
     );
 
     final authService = AuthService(
@@ -60,7 +63,10 @@ Future<void> main() async {
       details: details.exception.toString()
     );
     
-  }, (error, stack) => Log().error(error.toString()),);
+  }, (error, stack) {
+    Log().error(error.toString());
+    Log().error(stack.toString());
+  },);
 }
 
 class App extends StatelessWidget {

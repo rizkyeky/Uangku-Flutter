@@ -5,26 +5,33 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+// import 'package:crypto/crypto.dart';
+// import 'dart:convert';
+import 'package:encrypt/encrypt.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:uangku/_lib.dart';
+// import 'package:uangku/_lib.dart';
+import 'package:uangku/utils/_utils.dart';
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const App());
+void main() async {
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  await dotenv.load(fileName: '.env');
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  final urlEncoded = dotenv.env['SUPABASE_URL_ENCODED']!;
+  final apikeyEncoded = dotenv.env['SUPABASE_APIKEY_ENCODED']!;
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  final url = decryptSecretKey(SecretKey.supabaseUrlKey, urlEncoded);
+  final apiKey = decryptSecretKey(SecretKey.supabaseApiKeyKey, apikeyEncoded);
+
+  print(url);
+  print(apiKey);
+
+  // final plainText = 'https://lgxdqrfjcrugbqjdoxlg.supabase.co';
+  // final key = Key.fromUtf8('Sk&%fOLjelr6BftTXj7vL60Y!*u3YGC@');
+  // final iv = IV.fromLength(16);
+
+  // final encrypter = Encrypter(AES(key));
+
+  // final encrypted = encrypter.encrypt(plainText, iv: iv);
+  // print(encrypted.base64);
 }

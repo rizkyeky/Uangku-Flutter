@@ -23,7 +23,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> init() async {
     final persistSession = await getPersistSession();
-    if (persistSession.trim().isNotEmpty) {
+    if (persistSession != null) {
       await _authService.recoverSession(persistSession)
       .then((value) {
         _session = value.session;
@@ -36,8 +36,8 @@ class AuthProvider extends ChangeNotifier {
     return await _databaseService.fetch(
       table: 'Profile', 
       columns: '*',
-      // eqColumn: 'id',
-      // eqValue: user?.id,
+      eqColumn: 'id',
+      eqValue: user?.id,
     )
     .then((value) {
       if (value is Map<String, dynamic>) {
@@ -88,27 +88,26 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
-  static const String _key = 'SESSION_KEY';
+  static const String _key = SecretKey.sessionKey;
 
   Future<void> savePersistSession() async {
-    final key = dotenv.env[_key]!;
     if (_session != null) {
-      await _encryptedPrefs.setString(key, _session!.persistSessionString);
+      await _encryptedPrefs.setString(_key, _session!.persistSessionString);
     }
   }
 
-  Future<String> getPersistSession() async {
-    final key = dotenv.env[_key]!;
-    return await _encryptedPrefs.getString(key);
+  Future<String?> getPersistSession() async {
+    var val = await _encryptedPrefs.getString(_key);
+    val = val.trim();
+    return (val.isEmpty) ? null : val;
   }
 
-  Future<bool> hasPersistSession() async {
-    final persist = await getPersistSession();
-    return persist.trim().isNotEmpty;
-  }
+  // Future<bool> hasPersistSession() async {
+  //   final persist = await getPersistSession();
+  //   return persist?.trim().isNotEmpty ?? false;
+  // }
 
   Future<void> removePersistedSession() async {
-    final key = dotenv.env[_key]!;
-    await _encryptedPrefs.remove(key);
+    await _encryptedPrefs.remove(_key);
   }
 }

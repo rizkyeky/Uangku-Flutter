@@ -7,7 +7,7 @@ class SupabaseService {
     required String apiKey,
   }) : _client = SupabaseClient(url, apiKey);
   
-  late final SupabaseClient _client;
+  final SupabaseClient _client;
   
   SupabaseClient get client => _client;
 }
