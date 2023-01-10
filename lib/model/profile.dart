@@ -10,12 +10,10 @@ class Profile {
   });
 
   // toJson
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'id': user?.id,
       'name': name,
     };
-  }
 
   // fromJson
   factory Profile.fromJsonAndUser(Map<String, dynamic> json, User? user) {

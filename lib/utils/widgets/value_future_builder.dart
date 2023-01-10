@@ -6,7 +6,8 @@ class ValueFutureBuilder<T> extends StatelessWidget {
   final Widget Function(BuildContext context, Object? error)? onErrorBuilder;
   final void Function(Object? error)? onError;
   final Widget Function(BuildContext context)? onLoadingBuilder;
-  final Widget Function(BuildContext context, T? value) onValueBuilder;
+  final Widget Function(BuildContext context)? onEmptyNullBuilder;
+  final Widget Function(BuildContext context, T value) onValueBuilder;
 
   const ValueFutureBuilder({
     super.key,
@@ -14,6 +15,7 @@ class ValueFutureBuilder<T> extends StatelessWidget {
     this.onErrorBuilder,
     this.onError,
     this.onLoadingBuilder,
+    this.onEmptyNullBuilder,
     this.future,
   });
 
@@ -33,7 +35,11 @@ class ValueFutureBuilder<T> extends StatelessWidget {
               child: Text(snapshot.error.toString())
             );
           } else {
-            return onValueBuilder(context, snapshot.data);
+            if (snapshot.hasData && snapshot.data != null) {
+              return onValueBuilder(context, snapshot.data as T);
+            } else {
+              return onEmptyNullBuilder?.call(context) ?? const SizedBox.shrink();
+            }
           }
         }
       }

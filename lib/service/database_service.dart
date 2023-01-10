@@ -13,39 +13,42 @@ class DatabaseService {
     required String table,
     required Map<String, dynamic> data
   }) async {
-    await _client.from(table).insert(data)
+    return await _client.from(table).insert(data)
     .then((value) {
       Log().service('insert $table');
       return value;
-    }, onError: (error, stackTrace) {
+    }, onError: (error, t) {
       Log().error(error.toString());
+      Log().error(t.toString());
       throw error!;
     });
   }
 
   Future fetch({
     required String table,
-    required String columns,
+    String? columns,
     String? eqColumn,
     dynamic eqValue, 
   }) async {
-    final select = _client.from(table).select(columns);
+    final select = _client.from(table).select(columns ?? '*');
     if (eqColumn != null && eqValue != null) {
-      await select.eq(eqColumn, eqValue)
+      return await select.eq(eqColumn, eqValue)
       .then((value) {
-        Log().service('insert $table');
+        Log().service('fetch with eq $table');
         return value;
-      }, onError: (error, stackTrace) {
+      }, onError: (error, t) {
         Log().error(error.toString());
+        Log().error(t.toString());
         throw error!;
       });
     } else {
-      await select
+      return await select
       .then((value) {
-        Log().service('insert $table');
+        Log().service('fetch $table');
         return value;
-      }, onError: (error, stackTrace) {
+      }, onError: (error, t) {
         Log().error(error.toString());
+        Log().error(t.toString());
         throw error!;
       });
     }
@@ -54,13 +57,14 @@ class DatabaseService {
   Future delete({
     required String table,
   }) async {
-    await _client.from(table).delete()
+    return await _client.from(table).delete()
     .then((value) {
       Log().service('delete $table');
       return value;
     })
-    .onError((error, stackTrace) {
+    .onError((error, t) {
       Log().error(error.toString());
+      Log().error(t.toString());
       throw error!;
     });
   }
@@ -69,13 +73,14 @@ class DatabaseService {
     required String table,
     required Map<String, dynamic> data
   }) async {
-    await _client.from(table).update(data)
+    return await _client.from(table).update(data)
     .then((value) {
       Log().service('update $table');
       return value;
     })
-    .onError((error, stackTrace) {
+    .onError((error, t) {
       Log().error(error.toString());
+      Log().error(t.toString());
       throw error!;
     });
   }

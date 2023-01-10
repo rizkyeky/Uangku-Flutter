@@ -45,8 +45,9 @@ dependencies:
   encrypted_shared_preferences: ^3.0.1
   localization: ^2.1.0
   flutter_dotenv: ^5.0.2
-  crypto: ^3.0.2
   encrypt: ^5.0.1
+  fade_shimmer: ^2.2.0
+  fl_chart: ^0.55.2
   
 dev_dependencies:
   flutter_test:

@@ -27,21 +27,23 @@ class AuthProvider extends ChangeNotifier {
       await _authService.recoverSession(persistSession)
       .then((value) {
         _session = value.session;
-      })
-      .onError((error, stackTrace) => _session = null,);
+      }, onError: (e, t) async {
+        _session = null;
+        await removePersistedSession();
+      });
     }
   }
 
   Future<Profile?> getProfile() async {
     return await _databaseService.fetch(
-      table: 'Profile', 
-      columns: '*',
+      table: 'profile', 
       eqColumn: 'id',
       eqValue: user?.id,
     )
     .then((value) {
-      if (value is Map<String, dynamic>) {
-        return Profile.fromJsonAndUser(value, user);
+      print(value.runtimeType);
+      if (value is List && value.isNotEmpty) {
+        return Profile.fromJsonAndUser(value[0], user);
       }
       return null;
     });
@@ -68,7 +70,7 @@ class AuthProvider extends ChangeNotifier {
       _session = value.session;
       if (_session != null) {
         await _databaseService.insert(
-          table: 'Profile', 
+          table: 'profile', 
           data: {
             'id': _session!.user.id,
             'name': name,
@@ -101,11 +103,6 @@ class AuthProvider extends ChangeNotifier {
     val = val.trim();
     return (val.isEmpty) ? null : val;
   }
-
-  // Future<bool> hasPersistSession() async {
-  //   final persist = await getPersistSession();
-  //   return persist?.trim().isNotEmpty ?? false;
-  // }
 
   Future<void> removePersistedSession() async {
     await _encryptedPrefs.remove(_key);

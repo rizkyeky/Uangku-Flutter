@@ -9,19 +9,19 @@ class AuthService {
 
   final SupabaseClient _client;
   
-  Session? currentSession() {
-    return _client.auth.currentSession;
-  }
+  Session? currentSession() => _client.auth.currentSession;
 
   Future<AuthResponse> recoverSession(String session) async {
     try {
       final response = await _client.auth.recoverSession(session);
       return response;
-    } on AuthException catch (e) {
+    } on AuthException catch (e, t) {
       Log().error(e.message);
+      Log().error(t.toString());
       throw e.message;
-    } catch (e) {
+    } catch (e, t) {
       Log().error(e.toString());
+      Log().error(t.toString());
       if (e.toString().contains('Failed host lookup')) {
         throw 'Error Internet Connection';
       } else {
@@ -38,11 +38,13 @@ class AuthService {
       );
       Log().service('SignUp');
       return response;
-    } on AuthException catch (e) {
+    } on AuthException catch (e, t) {
       Log().error(e.message);
+      Log().error(t.toString());
       throw e.message;
-    } catch (e) {
+    } catch (e, t) {
       Log().error(e.toString());
+      Log().error(t.toString());
       if (e.toString().contains('Failed host lookup')) {
         throw 'Error Internet Connection';
       } else {
@@ -59,11 +61,13 @@ class AuthService {
       );
       Log().service('SignIn');
       return response;
-    } on AuthException catch (e) {
+    } on AuthException catch (e, t) {
       Log().error(e.message);
+      Log().error(t.toString());
       throw e.message;
-    } catch (e) {
+    } catch (e, t) {
       Log().error(e.toString());
+      Log().error(t.toString());
       if (e.toString().contains('Failed host lookup')) {
         throw 'Error Internet Connection';
       } else {
@@ -76,11 +80,13 @@ class AuthService {
     try {
       await _client.auth.signOut();
       Log().service('SignOut');
-    } on AuthException catch (e) {
+    } on AuthException catch (e, t) {
       Log().error(e.message);
+      Log().error(t.toString());
       throw e.message;
-    } catch (e) {
+    } catch (e, t) {
       Log().error(e.toString());
+      Log().error(t.toString());
       if (e.toString().contains('Failed host lookup')) {
         throw 'Error Internet Connection';
       } else {

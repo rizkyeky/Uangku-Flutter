@@ -5,33 +5,39 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-// import 'package:crypto/crypto.dart';
-// import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:uangku/provider/_provider.dart';
+import 'package:uangku/service/_service.dart';
 
-// import 'package:uangku/_lib.dart';
 import 'package:uangku/utils/_utils.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
-
+  
   await dotenv.load(fileName: '.env');
-
   final urlEncoded = dotenv.env['SUPABASE_URL_ENCODED']!;
-  final apikeyEncoded = dotenv.env['SUPABASE_APIKEY_ENCODED']!;
+  final apiKeyEncoded = dotenv.env['SUPABASE_API_KEY_ENCODED']!;
 
-  final url = decryptSecretKey(SecretKey.supabaseUrlKey, urlEncoded);
-  final apiKey = decryptSecretKey(SecretKey.supabaseApiKeyKey, apikeyEncoded);
+  final supabaseService = SupabaseService(
+    url: decryptSecretKey(SecretKey.supabaseUrlKey, urlEncoded),
+    apiKey: decryptSecretKey(SecretKey.supabaseApiKeyKey, apiKeyEncoded)
+  );
 
-  print(url);
-  print(apiKey);
+  final authService = AuthService(
+    client: supabaseService.client
+  );
 
-  // final plainText = 'https://lgxdqrfjcrugbqjdoxlg.supabase.co';
-  // final key = Key.fromUtf8('Sk&%fOLjelr6BftTXj7vL60Y!*u3YGC@');
-  // final iv = IV.fromLength(16);
+  final databaseService = DatabaseService(
+    client: supabaseService.client
+  );
 
-  // final encrypter = Encrypter(AES(key));
+  final authRes = await authService.signIn('eky@gmail.com', '123456');
 
-  // final encrypted = encrypter.encrypt(plainText, iv: iv);
-  // print(encrypted.base64);
+  await supabaseService.client.from('transaction').select().then((value) {
+    print(value);
+  });
+
+  final data = await databaseService.fetch(table: 'transaction');
+  print(data);
 }

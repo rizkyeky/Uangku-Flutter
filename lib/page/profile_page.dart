@@ -7,7 +7,6 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightnessProvider = context.read<BrightnessProvider>();
     final authProvider = context.read<AuthProvider>();
-    final profile = context.select<int, Profile?>((value) => null);
     Log().build('Profile page');
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -24,9 +23,8 @@ class ProfilePage extends StatelessWidget {
             ValueFutureBuilder<Profile?>(
               future: authProvider.getProfile(),
               onValueBuilder: (context, value) {
-                print(value?.toJson());
-                return Text(authProvider.user?.email ?? 'no email',
-                  style: TextTheme.bodySm.copyWith(
+                return Text(value?.name ?? 'no name',
+                  style: TextTheme.bodyMd.copyWith(
                     color: TextColors.dynamicBaseColor(context),
                   ),
                 );
@@ -65,12 +63,12 @@ class ProfilePage extends StatelessWidget {
               child: Text('signout'.i18n()),
               onPressed: () async {
                 await authProvider.signOut()
-                  .then((value) {
-                    Log().success('SignOut');
-                  })
-                  .onError((error, stackTrace) {
-                    SnackBar.show(context, error.toString(), autoDismiss: true);
-                  });
+                .then((value) {
+                  Log().success('SignOut');
+                })
+                .onError((error, stackTrace) {
+                  SnackBar.show(context, error.toString(), autoDismiss: true);
+                });
               },
             ),
           ],
