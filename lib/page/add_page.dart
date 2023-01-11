@@ -6,14 +6,12 @@ class AddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Log().build('Add page');
-    String? name, desc;
-    int? amount;
-    String type = 'input';
+    final transactionProvider = context.read<TransactionProvider>();
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('add'.i18n()),
       ),
-      child: Padding(
+      child: SingleChildScrollView(
         padding: GapPadding.all16S,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,10 +21,10 @@ class AddPage extends StatelessWidget {
             StatefulBuilder(
               builder: (context, setState) {
                 return CupertinoSlidingSegmentedControl<String>(
-                  groupValue: type,
+                  groupValue: transactionProvider.type,
                   onValueChanged: (value) {
-                    if (type != value) {
-                      setState(() => type = value!);
+                    if (transactionProvider.type != value) {
+                      setState(() => transactionProvider.type = value!);
                     }
                   },
                   children: {
@@ -53,7 +51,8 @@ class AddPage extends StatelessWidget {
             Gap.h8,
             CupertinoTextField(
               placeholder: 'Masukan jumlah',
-              onChanged: (value) => amount = int.tryParse(value),
+              onChanged: (value) => 
+                transactionProvider.amount = int.tryParse(value.replaceAll('.', '')),
               inputFormatters: [
                 CurrencyTextInputFormatter(
                   locale: 'id',
@@ -62,13 +61,14 @@ class AddPage extends StatelessWidget {
                 ),
               ],
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
               padding: GapPadding.all16S,
               decoration: BoxDecoration(
                 color: CupertinoColors.tertiarySystemFill,
                 borderRadius: BorderRadius.circular(8),
               ),
               prefix: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.only(left: 16),
                 child: Text('Rp',
                   style: TextTheme.caption.copyWith(
                     color: CupertinoColors.systemGrey,
@@ -85,8 +85,9 @@ class AddPage extends StatelessWidget {
             Gap.h8,
             CupertinoTextField(
               placeholder: 'Masukan nama',
-              onChanged: (value) => name = value,
-              keyboardType: TextInputType.text,
+              onChanged: (value) => transactionProvider.name = value,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
               padding: GapPadding.all16S,
               decoration: BoxDecoration(
                 color: CupertinoColors.tertiarySystemFill,
@@ -102,22 +103,39 @@ class AddPage extends StatelessWidget {
             Gap.h8,
             CupertinoTextField(
               placeholder: 'Masukan deskripsi (opsional)',
-              onChanged: (value) => desc = value,
-              keyboardType: TextInputType.text,
+              onChanged: (value) => transactionProvider.desc = value,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.done,
               padding: GapPadding.all16S,
               decoration: BoxDecoration(
                 color: CupertinoColors.tertiarySystemFill,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            const Spacer(),
+            Gap.h32,
+            Gap.h32,
             Button.tinted(
               child: Text('add'.i18n()),
-              onPressed: () {
-                if (amount != null) {
-
+              onPressed: () async {
+                if (transactionProvider.amount == null) {
+                  SnackBar.show(context, 
+                    'Jumlah belum diisi',
+                    autoDismiss: true
+                  );
+                } else if (transactionProvider.name == null) {
+                  SnackBar.show(context, 'Nama belum diisi',
+                    autoDismiss: true
+                  );
                 } else {
-                  SnackBar.show(context, 'Jumlah belum diisi');
+                  await transactionProvider.addTransaction()
+                  .then((value) {
+                    transactionProvider.clearInput();
+                    Navigator.of(context).pop();
+                  }, onError: (e, t) {
+                    SnackBar.show(context, e.toString(),
+                      autoDismiss: true
+                    );
+                  });
                 }
               },
             ),

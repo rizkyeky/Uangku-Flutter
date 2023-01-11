@@ -5,23 +5,25 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider({
     required AuthService authService,
     required DatabaseService databaseService,
-    required EncryptedSharedPreferences encryptedPrefs
+    required FunctionService functionService,
+    required EncryptedSharedPreferences encryptedPrefs,
   }) : 
   _authService = authService, 
   _databaseService = databaseService, 
+  _functionService = functionService, 
   _encryptedPrefs = encryptedPrefs;
 
   final AuthService _authService;
   final DatabaseService _databaseService;
+  final FunctionService _functionService;
   final EncryptedSharedPreferences _encryptedPrefs;
-
-  final Completer<Session?> _sessionCompleter = Completer();
 
   bool get isLogged => _authService.currentSession() != null;
   Session? get session => _authService.currentSession();
   User? get user => _authService.currentSession()?.user;
 
   Session? _session;
+  Profile? _profile;
 
   Future<void> init() async {
     final persistSession = await getPersistSession();
@@ -31,23 +33,28 @@ class AuthProvider extends ChangeNotifier {
         _session = value.session;
       }, onError: (e, t) async {
         _session = null;
+        _profile = null;
         await removePersistedSession();
       });
     }
   }
 
   Future<Profile?> getProfile() async {
-    return await _databaseService.fetch(
-      table: 'profile', 
-      eqColumn: 'id',
-      eqValue: user?.id,
-    )
-    .then((value) {
-      if (value is List && value.isNotEmpty) {
-        return Profile.fromJsonAndUser(value[0], user);
-      }
-      return null;
-    });
+    if (_profile != null && _profile?.user?.id == user?.id) {
+      return _profile;
+    } else {
+      return await _databaseService.fetch(
+        table: 'profile', 
+        eqColumn: 'id',
+        eqValue: user?.id,
+      )
+      .then((value) {
+        if (value is List && value.isNotEmpty) {
+          return _profile = Profile.fromJsonAndUser(value[0], user);
+        }
+        return null;
+      });
+    }
   }
 
   Future<void> signIn(String email, String password) async {
@@ -86,6 +93,8 @@ class AuthProvider extends ChangeNotifier {
   Future<void> signOut() async {
     await _authService.signOut()
     .then((_) async {
+      _session = null;
+      _profile = null;
       await removePersistedSession();
       notifyListeners();
     });

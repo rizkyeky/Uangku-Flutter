@@ -30,9 +30,14 @@ Future<void> main() async {
       client: supabaseService.client
     );
 
+    final functionService = FunctionService(
+      client: supabaseService.client
+    );
+
     final authProvider = AuthProvider(
       authService: authService,
       databaseService: databaseService,
+      functionService: functionService,
       encryptedPrefs: encryptedPrefs
     );
     await authProvider.init();
@@ -53,6 +58,13 @@ Future<void> main() async {
             binding: binding,
             prefs: prefs,
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TransactionProvider(
+            databaseService: databaseService,
+            authProvider: authProvider,
+          ),
+          lazy: true,
         ),
       ],
       child: const App(),

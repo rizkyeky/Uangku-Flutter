@@ -8,6 +8,8 @@ class ProfilePage extends StatelessWidget {
     final brightnessProvider = context.read<BrightnessProvider>();
     final authProvider = context.read<AuthProvider>();
     final localeProvider = context.read<LocalizationProvider>();
+    Localizations.localeOf(context);
+
     Log().build('Profile page');
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(

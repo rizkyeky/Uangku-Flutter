@@ -6,6 +6,7 @@ import 'package:encrypt/encrypt.dart' as encr;
 import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 part 'sizer.dart';

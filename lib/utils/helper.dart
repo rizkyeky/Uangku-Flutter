@@ -14,8 +14,17 @@ Color resolveDynamicColor(BuildContext context, {
   required Color color, 
   required Color darkColor
 }) => CupertinoDynamicColor.resolve(
-    CupertinoDynamicColor.withBrightness(
-      color: color, 
-      darkColor: darkColor,
-    ), context
+  CupertinoDynamicColor.withBrightness(
+    color: color, 
+    darkColor: darkColor,
+  ), context
+);
+
+String numberToRupiah(num number) {
+  final formatter = NumberFormat.currency(
+    locale: 'id_ID', 
+    symbol: 'Rp', 
+    decimalDigits: 0,
   );
+  return formatter.format(number);
+}

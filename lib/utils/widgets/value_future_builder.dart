@@ -8,6 +8,7 @@ class ValueFutureBuilder<T> extends StatelessWidget {
   final Widget Function(BuildContext context)? onLoadingBuilder;
   final Widget Function(BuildContext context)? onEmptyNullBuilder;
   final Widget Function(BuildContext context, T value) onValueBuilder;
+  final Widget Function(BuildContext context)? noLoadingBuilder;
 
   const ValueFutureBuilder({
     super.key,
@@ -17,6 +18,7 @@ class ValueFutureBuilder<T> extends StatelessWidget {
     this.onLoadingBuilder,
     this.onEmptyNullBuilder,
     this.future,
+    this.noLoadingBuilder
   });
 
   @override
@@ -25,9 +27,13 @@ class ValueFutureBuilder<T> extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return onLoadingBuilder?.call(context) ?? const Center(
-            child: CupertinoActivityIndicator()
-          );
+          if (noLoadingBuilder != null) {
+            return noLoadingBuilder?.call(context) ?? const SizedBox.shrink();
+          } else {
+            return onLoadingBuilder?.call(context) ?? const Center(
+              child: CupertinoActivityIndicator()
+            );
+          }
         } else {
           if (snapshot.hasError) {
             onError?.call(snapshot.error);

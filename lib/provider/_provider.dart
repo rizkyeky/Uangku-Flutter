@@ -15,3 +15,4 @@ import 'package:uangku/utils/_utils.dart';
 part 'brightness_provider.dart';
 part 'auth_provider.dart';
 part 'localization_provider.dart';
+part 'transaction_provider.dart';

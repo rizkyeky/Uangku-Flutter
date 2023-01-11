@@ -22,7 +22,6 @@ class HomePage extends StatelessWidget {
               enableDrag: false,
               builder: (context) => const AddPage(),
             );
-            // Routemaster.of(context).push('/add');
           },
           child: const Icon(CupertinoIcons.add),
         )
@@ -41,10 +40,24 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Gap.h4,
-            Text('Rp1.000.000',
-              style: TextTheme.h3.copyWith(
-                color: TextColors.dynamicBaseColor(context)
-              ),
+            Consumer<TransactionProvider>(
+              builder: (context, transactionProvider, child) {
+                return ValueFutureBuilder<int?>(
+                  future: transactionProvider.calculateTotal(),
+                  onValueBuilder: (context, value) {
+                    return Text(numberToRupiah(value ?? 0),
+                      style: TextTheme.h3.copyWith(
+                        color: TextColors.dynamicBaseColor(context)
+                      ),
+                    );
+                  },
+                  onLoadingBuilder: (context) => Text('-',
+                    style: TextTheme.h3.copyWith(
+                      color: TextColors.dynamicBaseColor(context)
+                    ),
+                  ),
+                );
+              }
             ),
             Gap.h16,
             UangkuMainChart(),
