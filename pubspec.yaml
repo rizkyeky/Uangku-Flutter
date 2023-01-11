@@ -48,6 +48,9 @@ dependencies:
   encrypt: ^5.0.1
   fade_shimmer: ^2.2.0
   fl_chart: ^0.55.2
+  modal_bottom_sheet: ^2.1.2
+  intl: ^0.17.0
+  currency_text_input_formatter: ^2.1.8
   
 dev_dependencies:
   flutter_test:

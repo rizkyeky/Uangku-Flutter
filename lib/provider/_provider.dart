@@ -1,5 +1,7 @@
 library _provider;
 
+import 'dart:async';
+
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';

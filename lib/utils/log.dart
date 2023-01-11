@@ -18,7 +18,7 @@ class Log {
   );
   static final _loggerError = Logger(
     printer: PrettyPrinter(
-      methodCount: 2,
+      methodCount: 3,
       errorMethodCount: 8,
       lineLength: 120,
       colors: false,

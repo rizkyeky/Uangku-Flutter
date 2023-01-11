@@ -15,6 +15,7 @@ class PrimaryColors {
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color scaffoldBackground = Color(0xFFF2F2F7);
+  static const Color transparent = Color(0x00000000);
 }
 
 class TextColors {
@@ -30,11 +31,10 @@ class TextColors {
   static const v200 = Color(0xFFE1E1E1);
   static const v100 = Color(0xFFEEEEEE);
 
-  static dynamicBaseColor(BuildContext context) => CupertinoDynamicColor.resolve(
-    const CupertinoDynamicColor.withBrightness(
-      color: base, 
-      darkColor: v200,
-    ), context
+  static Color dynamicBaseColor(BuildContext context) => resolveDynamicColor(
+    context, 
+    color: base, 
+    darkColor: v100
   );
 }
 

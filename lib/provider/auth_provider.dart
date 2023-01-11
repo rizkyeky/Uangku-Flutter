@@ -15,6 +15,8 @@ class AuthProvider extends ChangeNotifier {
   final DatabaseService _databaseService;
   final EncryptedSharedPreferences _encryptedPrefs;
 
+  final Completer<Session?> _sessionCompleter = Completer();
+
   bool get isLogged => _authService.currentSession() != null;
   Session? get session => _authService.currentSession();
   User? get user => _authService.currentSession()?.user;
@@ -41,7 +43,6 @@ class AuthProvider extends ChangeNotifier {
       eqValue: user?.id,
     )
     .then((value) {
-      print(value.runtimeType);
       if (value is List && value.isNotEmpty) {
         return Profile.fromJsonAndUser(value[0], user);
       }

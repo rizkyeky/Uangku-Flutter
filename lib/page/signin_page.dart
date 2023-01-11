@@ -64,12 +64,12 @@ class SignInPage extends StatelessWidget {
                   final isValid = formKey.currentState?.validate();
                   if (isValid == true && email != null && password != null) {
                     await authProvider.signIn(email!, password!)
-                      .then((value) {
-                        Log().success('SignIn');
-                      })
-                      .onError((error, stackTrace) {
-                        SnackBar.show(context, error.toString(), autoDismiss: true);
-                      });
+                    .then((value) {
+                      Log().success('SignIn');
+                    })
+                    .onError((error, stackTrace) {
+                      SnackBar.show(context, error.toString(), autoDismiss: true);
+                    });
                   }
                 },
                 child: Text('signin'.i18n()),

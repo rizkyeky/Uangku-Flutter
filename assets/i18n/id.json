@@ -7,5 +7,9 @@
     "signout": "Keluar",
     "change_lang": "Ganti Bahasa",
     "name": "Nama",
-    "confirm": "Konfirmasi"
+    "confirm": "Konfirmasi",
+    "this_week": "Minggu Ini",
+    "this_month": "Bulan Ini",
+    "this_year": "Tahun Ini",
+    "add": "Tambah"
 }

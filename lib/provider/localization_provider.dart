@@ -28,7 +28,7 @@ class LocalizationProvider with ChangeNotifier {
     _platformLocale = locale;
   }
 
-  void changeLangTo() {
+  void changeLang() {
     if (_currLocale == null) {
       _currLocale = _defaultLocale;
     } else if (_currLocale?.languageCode == 'en') {

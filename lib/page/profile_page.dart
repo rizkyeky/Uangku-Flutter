@@ -7,6 +7,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightnessProvider = context.read<BrightnessProvider>();
     final authProvider = context.read<AuthProvider>();
+    final localeProvider = context.read<LocalizationProvider>();
     Log().build('Profile page');
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -56,6 +57,30 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 brightnessProvider.setToDefaultSystem();
               },
+            ),
+            Gap.h32,
+            Row(
+              children: [
+                Expanded(
+                  child: Button.outlined(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: const Text('Inggris'),
+                    onPressed: () {
+                      localeProvider.changeLang();
+                    },
+                  ),
+                ),
+                Gap.w16,
+                Expanded(
+                  child: Button.outlined(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: const Text('Indonesia'),
+                    onPressed: () {
+                      localeProvider.changeLang();
+                    },
+                  ),
+                ),
+              ],
             ),
             Gap.h32,
             Button.outlined(

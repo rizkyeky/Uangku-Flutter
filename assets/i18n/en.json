@@ -7,5 +7,9 @@
     "signout": "Sign Out",
     "change_lang": "Change Language",
     "name": "Name",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "this_week": "This Week",
+    "this_month": "This Month",
+    "this_year": "This Year",
+    "add": "Add"
 }

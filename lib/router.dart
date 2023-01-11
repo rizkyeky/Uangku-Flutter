@@ -32,7 +32,11 @@ RouteMap routeMap(BuildContext context) {
       ),
       '/profile': (route) => const CupertinoPage(
         child: ProfilePage()
-      )
+      ),
+      '/add': (route) => const CupertinoPage(
+        fullscreenDialog: true,
+        child: AddPage()
+      ),
     }
   );
 }

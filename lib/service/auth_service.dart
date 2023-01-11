@@ -30,6 +30,25 @@ class AuthService {
     }
   }
 
+  Future<AuthResponse> refreshSession() async {
+    try {
+      final response = await _client.auth.refreshSession();
+      return response;
+    } on AuthException catch (e, t) {
+      Log().error(e.message);
+      Log().error(t.toString());
+      throw e.message;
+    } catch (e, t) {
+      Log().error(e.toString());
+      Log().error(t.toString());
+      if (e.toString().contains('Failed host lookup')) {
+        throw 'Error Internet Connection';
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   Future<AuthResponse> signUp(String email, String password) async {
     try {
       final response = await _client.auth.signUp(
