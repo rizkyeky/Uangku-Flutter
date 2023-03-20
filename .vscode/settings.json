@@ -2,5 +2,6 @@
     "cSpell.words": [
         "Encrypter",
         "uangku"
-    ]
+    ],
+    "cmake.configureOnOpen": true
 }
